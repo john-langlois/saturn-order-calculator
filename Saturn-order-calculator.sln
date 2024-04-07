@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaturnCalculator.lib", "SaturnCalculator.lib\SaturnCalculator.lib.csproj", "{7602A1F4-CDD4-4BAF-981E-0F1D5C1CE1B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaturnCalculator.entity", "SaturnCalculator.entity\SaturnCalculator.entity.csproj", "{F31AAC24-C3F3-4E02-8587-E6A2509314FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaturnCalculator.api", "SaturnCalculator.api\SaturnCalculator.api.csproj", "{1B95CB19-D749-4110-9E67-178C97773D03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7602A1F4-CDD4-4BAF-981E-0F1D5C1CE1B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7602A1F4-CDD4-4BAF-981E-0F1D5C1CE1B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7602A1F4-CDD4-4BAF-981E-0F1D5C1CE1B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7602A1F4-CDD4-4BAF-981E-0F1D5C1CE1B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31AAC24-C3F3-4E02-8587-E6A2509314FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31AAC24-C3F3-4E02-8587-E6A2509314FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31AAC24-C3F3-4E02-8587-E6A2509314FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31AAC24-C3F3-4E02-8587-E6A2509314FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B95CB19-D749-4110-9E67-178C97773D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B95CB19-D749-4110-9E67-178C97773D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B95CB19-D749-4110-9E67-178C97773D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B95CB19-D749-4110-9E67-178C97773D03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
