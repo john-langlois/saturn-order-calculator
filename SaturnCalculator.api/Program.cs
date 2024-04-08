@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("ConnectionStrings"));
 builder.Services.AddSingleton<IPartsInterface, PartService>(x => new PartService(x.GetRequiredService<IOptionsMonitor<AppSettings>>()));
+builder.Services.AddSingleton<IOrdersInterface, OrdersService>(x => new OrdersService(x.GetRequiredService<IOptionsMonitor<AppSettings>>(), x.GetRequiredService<IPartsInterface>(),x.GetRequiredService<IPartInfoInterface>()));
+builder.Services.AddSingleton<IPartInfoInterface, PartInfoService>(x => new PartInfoService(x.GetRequiredService<IOptionsMonitor<AppSettings>>()));
 
 
 

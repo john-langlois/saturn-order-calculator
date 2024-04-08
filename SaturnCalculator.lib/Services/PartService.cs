@@ -17,12 +17,10 @@ public class PartService: IPartsInterface
     public async Task<IEnumerable<Part>> GetPartsFromSheet(string filePath)
     {
         List<Part> parts = new List<Part>();
-
-        FileInfo file = new FileInfo("/Users/johnlanglois/Downloads/test2.xslx");
-
+        
         try
         {
-            using (var workbook = new XLWorkbook("/Users/johnlanglois/Downloads/test2.xlsx"))
+            using (var workbook = new XLWorkbook(filePath))
             {
                 var worksheet = workbook.Worksheet(1); // Assuming the first worksheet
 
@@ -35,12 +33,12 @@ public class PartService: IPartsInterface
                 var range = worksheet.RangeUsed();
 
                 // Assuming the first row contains headers
-                int serialNoColumnIndex = 1;
-                int vendorItemNumberColumnIndex = 2;
-                int shippedQuantityColumnIndex = 3;
-                int shippedQuantityUOMColumnIndex = 4;
+                int vendorItemNumberColumnIndex = 1;
+                int shippedQuantityColumnIndex = 2;
+                int shippedQuantityUOMColumnIndex = 3;
+                int serialNoColumnIndex = 4;
 
-                for (int row = 2; row <= range.RowCount(); row++)
+                for (int row = 9; row <= range.RowCount(); row++)
                 {
                     Part item = new Part();
                     item.SerialNo = range.Cell(row, serialNoColumnIndex).Value.ToString();

@@ -14,7 +14,7 @@ public class PartsController : ControllerBase
         this.iDB = idb;
     }
 
-    [HttpGet]
-    [Route("[controller]/SendConfirmationEmail/{filePath}")]
+    [HttpPost]
+    [Route("[controller]/GetPartsFromFile")]
     public async Task<IEnumerable<Part>> GetPartsFromExcel(string filePath) => await this.iDB.GetPartsFromSheet(filePath);
 }

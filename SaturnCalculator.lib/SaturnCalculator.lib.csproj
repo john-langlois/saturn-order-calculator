@@ -17,6 +17,7 @@
     <ItemGroup>
       <PackageReference Include="ClosedXML" Version="0.104.0-preview2" />
       <PackageReference Include="EPPlus" Version="7.1.0" />
+      <PackageReference Include="FileUploadExtensionForIFormFile" Version="1.0.4" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0-preview.2.24128.5" />
       <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     </ItemGroup>
