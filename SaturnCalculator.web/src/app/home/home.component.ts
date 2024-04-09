@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OrdersService } from '../../services/orders.service';
 import { Orders } from '../../models/Orders';
 
@@ -7,13 +7,17 @@ import { Orders } from '../../models/Orders';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   fileToUpload: File | null = null;
 
   public order!:Orders;
 
   constructor(private orderService:OrdersService) { }
+
+  async ngOnInit() {
+    this.order = await this.orderService.GetOrderInfoFromFile();
+  }
 
   handleFileInput(event: Event): void {
     const target = event.target as HTMLInputElement;

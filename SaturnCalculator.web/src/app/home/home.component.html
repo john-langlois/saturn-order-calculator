@@ -1,107 +1,152 @@
-<div class="d-flex justify-content-center align-items-center p-3">
-    <div class="align-items-start">
-        <div class="input-group">
-        <input type="file" class="form-control" (change)="handleFileInput($event)">
-        <button class="btn btn-primary" (click)="getCalculatedOrders()">Submit</button>
-    </div>
-    </div>
 
-    <div *ngIf="order">
-<div class="container">
-    <div class="row">
-      <div class="col">
-        <h3>Order Details</h3>
-        <div class="card">
-          <div class="card-body">
-            <div class="form-group">
-              <label for="tradingPartner">Trading Partner</label>
-              <input type="text" class="form-control" id="tradingPartner" [value]="order.tradingPartner" disabled>
-            </div>
-            <div class="form-group">
-              <label for="poNumber">PO Number</label>
-              <input type="text" class="form-control" id="poNumber" [value]="order.poNumber">
-            </div>
-            <div class="form-group">
-              <label for="trailerNumber">Trailer Number</label>
-              <input type="text" class="form-control" id="trailerNumber" [value]="order.trailerNumber">
-            </div>
-            <div class="form-group">
-                <label for="trailerNumber">Bill Landing Number</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.billLandingNo">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Tracking Number</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.trackingNo">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Ship To Code</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.shipToCode">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Carrier Code</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.carrierCode">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Ship Date</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.shipDate">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Ship Time</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.shipTime">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Weight</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.weight">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Package Type</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.packageType">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Total Package Count</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.totalPackageCount">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Order Quantity</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.orderQuantity">
-              </div>
-              <div class="form-group">
-                <label for="trailerNumber">Order Cost</label>
-                <input type="text" class="form-control" id="trailerNumber" [value]="order.orderCost">
-              </div>
-          </div>
+<app-navbar></app-navbar>
+<div class="p-3 ">
+    <div class="row align-self-center">
+        <div class="align-items-start">
+            <div class="input-group">
+            <input type="file" class="form-control" (change)="handleFileInput($event)">
+            <button class="btn btn-primary" (click)="getCalculatedOrders()">Submit</button>
         </div>
-        <div class="card mt-3">
-          <div class="card-body">
-            <h5>Line Items</h5>
-            <div style="overflow-y:scroll;max-height: 40vh;">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Serial No</th>
-                    <th>Vendor Item Number</th>
-                    <th>Shipped Quantity</th>
-                    <th>Item Cost</th>
-                    <th>Total Cost</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of order.lineItems">
-                    <td>{{ item.serialNo }}</td>
-                    <td>{{ item.vendorItemNumber }}</td>
-                    <td>{{ item.shippedQuantity }}</td>
-                    <td>$ {{ item.itemCost }}</td>
-                    <td>$ {{ item.totalCost }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  
+    <div class="row py-3">
+        <div *ngIf="order">
+                <div class="row">
+                  <div class="col">
+                    <h3>Order Details</h3>
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="tradingPartner">Trading Partner</label>
+                                    <input type="text" class="form-control" id="tradingPartner" [value]="order.tradingPartner" >
+                                  </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="poNumber">PO Number</label>
+                                    <input type="text" class="form-control" id="poNumber" [value]="order.poNumber" >
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="tradingPartner">Trailer Number</label>
+                                    <input type="text" class="form-control" id="tradingPartner" [value]="order.trailerNumber" >
+                                  </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="poNumber">Bill Landing Number</label>
+                                    <input type="text" class="form-control" id="poNumber" [value]="order.billLandingNo">
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="tradingPartner">Tracking Number</label>
+                                    <input type="text" class="form-control" id="tradingPartner" [value]="order.trackingNo" >
+                                  </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="poNumber">Ship to Code</label>
+                                    <input type="text" class="form-control" id="poNumber" [value]="order.shipToCode">
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="tradingPartner">Carrier Code</label>
+                                    <input type="text" class="form-control" id="tradingPartner" [value]="order.carrierCode" >
+                                  </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="poNumber">Ship Date</label>
+                                    <input type="text" class="form-control" id="poNumber" [value]="order.shipDate">
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="tradingPartner">Ship time</label>
+                                    <input type="text" class="form-control" id="tradingPartner" [value]="order.shipTime" >
+                                  </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="poNumber">Weight (lbs)</label>
+                                    <input type="text" class="form-control" id="poNumber" [value]="order.weight">
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="tradingPartner">Package Type</label>
+                                    <input type="text" class="form-control" id="tradingPartner" [value]="order.packageType" >
+                                  </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="poNumber">Total Package Count</label>
+                                    <input type="text" class="form-control" id="poNumber" [value]="order.totalPackageCount">
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="tradingPartner">Order Quantity</label>
+                                    <input type="text" class="form-control" id="tradingPartner" [value]="order.orderQuantity" >
+                                  </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="poNumber">Order Cost</label>
+                                    <input type="text" class="form-control" id="poNumber" [value]="order.orderCost">
+                                  </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h3>Line Items</h3>
+                    <div class="card">
+                       <div class="card-body">
+                    <div style="overflow-y:scroll;max-height: 45vh;">
+                        <table class="table table-striped">
+                        <thead>
+                            <tr>
+                            <th>Serial No</th>
+                            <th>Vendor Item Number</th>
+                            <th>Shipped Quantity</th>
+                            <th>Item Cost</th>
+                            <th>Total Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of order.lineItems">
+                            <td>{{ item.serialNo }}</td>
+                            <td>{{ item.vendorItemNumber }}</td>
+                            <td>{{ item.shippedQuantity }}</td>
+                            <td>$ {{ item.itemCost }}</td>
+                            <td>$ {{ item.totalCost }}</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                    </div> 
+                    </div>
+                </div>        
+            </div>  
+        </div>
     </div>
-    
 </div>
