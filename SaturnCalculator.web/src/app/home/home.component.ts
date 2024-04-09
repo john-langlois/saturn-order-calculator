@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit {
   constructor(private orderService:OrdersService) { }
 
   async ngOnInit() {
-    this.order = await this.orderService.GetOrderInfoFromFile();
   }
 
   handleFileInput(event: Event): void {
