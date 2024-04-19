@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdersService } from '../../services/orders.service';
 import { Orders } from '../../models/Orders';
+import * as XLSX from 'xlsx'; 
+import { PDFService } from '../../services/pdf.service';
+import { ExcelService } from '../../services/excel.service';
+import { CSVService } from '../../services/csv.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +17,12 @@ export class HomeComponent implements OnInit {
 
   public order!:Orders;
 
-  constructor(private orderService:OrdersService) { }
+  constructor(
+    private orderService:OrdersService,
+    private pdfService:PDFService,
+    private excelService:ExcelService,
+    private csvService:CSVService
+    ) { }
 
   async ngOnInit() {
   }
@@ -28,10 +37,23 @@ export class HomeComponent implements OnInit {
 
   async getCalculatedOrders(){
     if(this.fileToUpload){
-
-      this.order = await this.orderService.GetOrderInfoFromFile();
-      console.log(this.order);
+      let formData = new FormData();
+      formData.append('file', this.fileToUpload);
+      this.order = await this.orderService.GetOrderInfoFromFile(formData);
+      console.log(this.order)
     }
+  }
+
+  exportToCSV() {
+    this.csvService.exportToCSV(this.order as any, 'calculatedOrders');
+  }
+ 
+  exportToExcel() {
+    this.excelService.exportToExcel(this.order as any, 'calculatedOrders');
+  }
+
+  exportToPDF() {
+    this.pdfService.exportToPDF(this.order as any, 'calculatedOrders');
   }
 
 }

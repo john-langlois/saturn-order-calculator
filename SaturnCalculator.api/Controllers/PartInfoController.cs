@@ -16,5 +16,17 @@ public class PartInfoController : ControllerBase
 
     [HttpPost]
     [Route("[controller]/GetAllPartInfo")]
-    public async Task<IEnumerable<PartInfo>> GetAllPartInfo(string filePath) => await this.iDB.GetAllPartInfo(filePath);
+    public async Task<IEnumerable<PartInfo>> GetAllPartInfo()
+    {
+        var files = this.Request.Form.Files;
+
+        if (files.Count != 1)
+        {
+            return new List<PartInfo>();
+        }
+
+        var res = await this.iDB.GetAllPartInfo(files[0]);
+
+        return res;
+    }
 }

@@ -1,5 +1,6 @@
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using Microsoft.AspNetCore.Http;
 using SaturnCalculator.lib.Interfaces;
 using Microsoft.Extensions.Options;
 using SaturnCalculator.lib.Models;
@@ -18,13 +19,17 @@ public class OrdersService: IOrdersInterface
         this.parts = parts;
         this.partInfo = partInfo;
     }
-    public async Task<Orders> CalculateOrderTotal(string filePath)
+    public async Task<Orders> CalculateOrderTotal(IFormFile file)
     {
         Orders Orders = new Orders();
         
+        await using var ms = new MemoryStream();
+
+        await file.OpenReadStream().CopyToAsync(ms);
+        
         try
         {
-            using (var workbook = new XLWorkbook(filePath))
+            using (var workbook = new XLWorkbook(ms))
             {
                 var worksheet = workbook.Worksheet(1); // Assuming the first worksheet
 
@@ -50,27 +55,49 @@ public class OrdersService: IOrdersInterface
                 Orders.PackageType = range.Cell("D5").Value.ToString();
                 Orders.TotalPackageCount = range.Cell("D6").Value.ToString();
 
-                IEnumerable<Part> allParts = await parts.GetPartsFromSheet(filePath);
-                IEnumerable<PartInfo> allPartInfo = await partInfo.GetAllPartInfo(filePath);
+                IEnumerable<Part> allParts = await parts.GetPartsFromSheet(file);
+                IEnumerable<PartInfo> allPartInfo = await partInfo.GetAllPartInfo(file);
                 List<CalculatedLineItems> lineItems = new List<CalculatedLineItems>();
-
+                List<CalculatedVendorItem> vendorItems = new List<CalculatedVendorItem>();
+                
+                var distinctArray = allParts.GroupBy(elem=>elem.VendorItemNumber).Select(group=>group.First()).ToList();
+                
                 PartInfo singlePartInfo;
                 foreach (var item in allParts)
                 {
                     CalculatedLineItems lineItem = new CalculatedLineItems();
-                    singlePartInfo = allPartInfo.Where(x => x.SerialNo == item.SerialNo).First();
+                    singlePartInfo = allPartInfo.First(x => x.VendorItemNumber == item.VendorItemNumber);
                     lineItem.VendorItemNumber = item.VendorItemNumber;
                     lineItem.SerialNo = item.SerialNo;
                     lineItem.ShippedQuantity = item.ShippedQuantity;
                     lineItem.ItemCost = singlePartInfo.ItemCost;
                     lineItem.TotalCost = int.Parse(singlePartInfo.ItemCost) * int.Parse(item.ShippedQuantity);
                     lineItems.Add(lineItem);
-
                     Orders.OrderCost += lineItem.TotalCost;
                     Orders.OrderQuantity += int.Parse(lineItem.ShippedQuantity);
+                    
+                }
+                Orders.LineItems = lineItems;
+                
+                
+                foreach (var item in distinctArray)
+                { 
+                    CalculatedVendorItem vendorPart = new CalculatedVendorItem(); 
+                    var commonParts = lineItems.Where(x => x.VendorItemNumber == item.VendorItemNumber);
+                    vendorPart.VendorItemNumber = item.VendorItemNumber;
+                    
+                   //Get total cost and quantity for grouped vendor item parts
+                   foreach (var part in commonParts)
+                   {
+                       vendorPart.TotalCost += part.TotalCost;
+                       vendorPart.TotalQuantity += int.Parse(part.ShippedQuantity);
+                   }
+                   vendorItems.Add(vendorPart);
                 }
 
-                Orders.LineItems = lineItems;
+                Orders.VendorItems = vendorItems;
+
+
             }
         }
         catch (Exception ex)
@@ -80,5 +107,4 @@ public class OrdersService: IOrdersInterface
 
         return Orders;
     }
-
 }

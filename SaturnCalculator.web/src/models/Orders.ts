@@ -1,4 +1,5 @@
 import { LineItems } from "./LineItems";
+import { VendorItems } from "./VendorItems";
 
 export interface Orders{
     tradingPartner:string;
@@ -15,5 +16,6 @@ export interface Orders{
     totalPackageCount:string;
     orderQuantity:string;
     orderCost:string;
-    lineItems: LineItems[]
+    lineItems: LineItems[];
+    vendorItems: VendorItems[];
 }

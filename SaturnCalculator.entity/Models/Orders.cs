@@ -17,4 +17,5 @@ public class Orders
     public float OrderQuantity { get; set; }
     public float OrderCost { get; set; }
     public List<CalculatedLineItems> LineItems { get; set; }
+    public List<CalculatedVendorItem> VendorItems { get; set; }
 }

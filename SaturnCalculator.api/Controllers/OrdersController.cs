@@ -14,7 +14,18 @@ public class OrdersController : ControllerBase
         this.iDB = idb;
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("[controller]/GetOrdersFromFile")]
-    public async Task<Orders> CalculateOrderTotal(string filePath) => await this.iDB.CalculateOrderTotal(filePath);
+    public async Task<Orders> CalculateOrderTotal(){
+        var files = this.Request.Form.Files;
+
+        if (files.Count != 1)
+        {
+            return new Orders();
+        }
+
+        var res = await this.iDB.CalculateOrderTotal(files[0]);
+
+        return res;
+    }
 }

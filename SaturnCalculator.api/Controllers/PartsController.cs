@@ -16,5 +16,16 @@ public class PartsController : ControllerBase
 
     [HttpPost]
     [Route("[controller]/GetPartsFromFile")]
-    public async Task<IEnumerable<Part>> GetPartsFromExcel(string filePath) => await this.iDB.GetPartsFromSheet(filePath);
+    public async Task<IEnumerable<Part>> GetPartsFromExcel(){
+        var files = this.Request.Form.Files;
+
+        if (files.Count != 1)
+        {
+            return new List<Part>();
+        }
+
+        var res = await this.iDB.GetPartsFromSheet(files[0]);
+
+        return res;
+    }
 }

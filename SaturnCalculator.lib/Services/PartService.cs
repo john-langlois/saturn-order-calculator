@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Http;
 using SaturnCalculator.lib.Interfaces;
 using Microsoft.Extensions.Options;
 using OfficeOpenXml;
@@ -14,13 +15,17 @@ public class PartService: IPartsInterface
     {
         this.options = options;
     }
-    public async Task<IEnumerable<Part>> GetPartsFromSheet(string filePath)
+    public async Task<IEnumerable<Part>> GetPartsFromSheet(IFormFile file)
     {
         List<Part> parts = new List<Part>();
         
+        await using var ms = new MemoryStream();
+
+        await file.OpenReadStream().CopyToAsync(ms);
+        
         try
         {
-            using (var workbook = new XLWorkbook(filePath))
+            using (var workbook = new XLWorkbook(ms))
             {
                 var worksheet = workbook.Worksheet(1); // Assuming the first worksheet
 

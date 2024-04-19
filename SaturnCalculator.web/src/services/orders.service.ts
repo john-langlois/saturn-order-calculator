@@ -11,9 +11,8 @@ export class OrdersService {
 	constructor(private http: HttpClient,private configService:ConfigService) { }
 
     public APIURL: string = "http://localhost:5253";
-    public DocumentPath: string = "/Users/johnlanglois/Downloads/OrderTest.xlsx";
 
-	public GetOrderInfoFromFile() {
-		return lastValueFrom(this.http.get<Orders>(this.APIURL +`/Orders/GetOrdersFromFile?filePath=${this.DocumentPath}`));
+	public GetOrderInfoFromFile(file:FormData) {
+		return lastValueFrom(this.http.post<Orders>(this.APIURL +`/Orders/GetOrdersFromFile`,file));
 	}
 }

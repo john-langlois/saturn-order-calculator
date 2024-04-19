@@ -9,12 +9,20 @@
         </div>
         </div>
     </div>
+    <div class="p-3" *ngIf="order">
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-success" (click)="exportToExcel()">Export to Excel</button>
+            <button class="btn btn-secondary mx-2" (click)="exportToPDF()">Export to PDF</button>
+            <button class="btn btn-primary" (click)="exportToCSV()">Export as CSV</button>
+        </div>
+    </div>
+    
     <div class="row py-3">
         <div *ngIf="order">
                 <div class="row">
                   <div class="col">
                     <h3>Order Details</h3>
-                    <div class="card">
+                    <div class="card" style="height: 60vh;overflow-y: scroll;">
                       <div class="card-body">
                         <div class="row">
                             <div class="col">
@@ -114,16 +122,36 @@
                                   </div>
                             </div>
                         </div>
+                        <div class="row p-2">
+                            <div class="card">
+                                <ul class="list-group list-group-flush" >
+                                    <li class="list-group-item list-group-item-light">
+                                        <div class="row">
+                                            <div class="col">Vendor Item Number</div>
+                                            <div class="col">Total Quantity</div>
+                                            <div class="col">Total Cost</div>
+                                        </div>
+                                    </li>
+                                  <li class="list-group-item" *ngFor="let item of order.vendorItems">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" value="{{item.vendorItemNumber}}">
+                                        <input type="text" class="form-control" value="{{item.totalQuantity}}">
+                                        <input type="text" class="form-control" value="$ {{item.totalCost}}">
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                        </div>
                       </div>
                     </div>
                 </div>
                 <div class="col">
                     <h3>Line Items</h3>
-                    <div class="card">
+                    <div class="card" style="overflow-y:scroll;height: 60vh;">
                        <div class="card-body">
-                    <div style="overflow-y:scroll;max-height: 45vh;">
+                    <div >
                         <table class="table table-striped">
-                        <thead>
+                        <thead class="sticky-top">
                             <tr>
                             <th>Serial No</th>
                             <th>Vendor Item Number</th>
