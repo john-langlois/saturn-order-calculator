@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { lastValueFrom, Observable } from "rxjs";
 import { environment } from "../environments/environment";
 import { Config } from "../models/Config";
+import { Orders } from "../models/Orders";
 
 @Injectable({
 	providedIn: "root"
@@ -12,6 +13,7 @@ export class ConfigService {
 	private config: Observable<Config>;
 
 	public APIURL!: string;
+	public order!: Orders;
 
 	constructor(private http: HttpClient) {
 		if (environment.production) {
@@ -28,6 +30,7 @@ export class ConfigService {
 			try {
 				let data = await lastValueFrom(this.config);
 				this.APIURL = data.APIURL;
+				this.order =data.Order;
 				resolve();
 			} catch {
 				reject();

@@ -10,9 +10,7 @@ import { ConfigService } from "./config.service";
 export class OrdersService {
 	constructor(private http: HttpClient,private configService:ConfigService) { }
 
-    public APIURL: string = "http://localhost:5253";
-
 	public GetOrderInfoFromFile(file:FormData) {
-		return lastValueFrom(this.http.post<Orders>(this.APIURL +`/Orders/GetOrdersFromFile`,file));
+		return lastValueFrom(this.http.post<Orders>(this.configService.APIURL +`/Orders/GetOrdersFromFile`,file));
 	}
 }

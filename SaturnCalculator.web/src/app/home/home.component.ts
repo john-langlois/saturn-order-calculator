@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx';
 import { PDFService } from '../../services/pdf.service';
 import { ExcelService } from '../../services/excel.service';
 import { CSVService } from '../../services/csv.service';
+import { ConfigService } from '../../services/config.service';
 
 @Component({
   selector: 'app-home',
@@ -21,10 +22,12 @@ export class HomeComponent implements OnInit {
     private orderService:OrdersService,
     private pdfService:PDFService,
     private excelService:ExcelService,
-    private csvService:CSVService
+    private csvService:CSVService,
+    private configService:ConfigService
     ) { }
 
-  async ngOnInit() {
+  public async ngOnInit() {
+    this.order = this.configService.order;
   }
 
   handleFileInput(event: Event): void {
@@ -49,7 +52,20 @@ export class HomeComponent implements OnInit {
   }
  
   exportToExcel() {
-    this.excelService.exportToExcel(this.order as any, 'calculatedOrders');
+    //this.excelService.exportToExcel(this.order as any, 'calculatedOrders');
+    const result = [];
+    for (const key in this.order) {
+        if (typeof (this.order as any)[key] !== 'object' && !Array.isArray((this.order as any)[key])) {
+            const newObj:any = {};
+            newObj[key] = (this.order as any)[key];
+            result.push(newObj);
+        }
+    }
+    console.log(result);
+    console.log(this.order.lineItems);
+    console.log(this.order.vendorItems);
+
+    this.excelService.convertToExcel(result, this.order.lineItems, this.order.vendorItems, 'calculatedOrders');
   }
 
   exportToPDF() {

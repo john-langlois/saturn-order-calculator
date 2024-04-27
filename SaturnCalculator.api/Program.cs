@@ -30,12 +30,12 @@ app.UseSwagger();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SaturnCalculator.api v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "saturn.api v1"));
 
 }
 else
 {
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/SaturnCalculator.api/swagger/v1/swagger.json", "backend.api v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/saturn.api/swagger/v1/swagger.json", "SaturnCalculator.api v1"));
 }
 
 app.UseHttpsRedirection();
