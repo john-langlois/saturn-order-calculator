@@ -7,19 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\SaturnCalculator.entity\SaturnCalculator.entity.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="ClosedXML" Version="0.104.0-preview2" />
+      <PackageReference Include="Dapper" Version="2.1.35" />
       <PackageReference Include="EPPlus" Version="7.1.0" />
       <PackageReference Include="FileUploadExtensionForIFormFile" Version="1.0.4" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0-preview.2.24128.5" />
       <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     </ItemGroup>
 
 </Project>

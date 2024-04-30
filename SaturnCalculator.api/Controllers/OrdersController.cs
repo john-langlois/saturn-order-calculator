@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SaturnCalculator.entity.Models;
 using SaturnCalculator.lib;
 using SaturnCalculator.lib.Interfaces;
 
@@ -28,4 +29,12 @@ public class OrdersController : ControllerBase
 
         return res;
     }
+
+    [HttpPost]
+    [Route("[controller]/UpsertOrderInfo")]
+    public async Task<int> UpsertOrderInfo(OrderInfo item) => await this.iDB.UpsertOrderInfo(item);
+
+    [HttpGet]
+    [Route("[controller]/GetAllOrderInfo")]
+    public async Task<IEnumerable<OrderInfo>> GetAllOrderInfo() => await this.iDB.GetAllOrderInfo();
 }

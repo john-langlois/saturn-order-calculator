@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using SaturnCalculator.lib.Interfaces;
 using Microsoft.Extensions.Options;
 using SaturnCalculator.lib.Models;
+using SaturnCalculator.entity.Models;
+using SaturnCalculator.lib.Repositories;
 
 namespace SaturnCalculator.lib.Services;
 
@@ -12,13 +14,18 @@ public class OrdersService: IOrdersInterface
     private readonly IOptionsMonitor<AppSettings> options;
     private readonly IPartsInterface parts;
     private readonly IPartInfoInterface partInfo;
+    private readonly SQLRepository db;
 
     public OrdersService(IOptionsMonitor<AppSettings> options, IPartsInterface parts, IPartInfoInterface partInfo)
     {
         this.options = options;
         this.parts = parts;
         this.partInfo = partInfo;
+        db = new SQLRepository(options);
     }
+
+    public Task<IEnumerable<OrderInfo>> GetAllOrderInfo() =>db.SQLGetAllOrderInfo();
+    public Task<int> UpsertOrderInfo(OrderInfo ins) => db.SQLUpsertOrderInfo(ins);
     public async Task<Orders> CalculateOrderTotal(IFormFile file)
     {
         Orders Orders = new Orders();

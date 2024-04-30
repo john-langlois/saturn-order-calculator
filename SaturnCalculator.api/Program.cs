@@ -28,15 +28,7 @@ var app = builder.Build();
 app.UseDeveloperExceptionPage();
 app.UseSwagger();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "saturn.api v1"));
-
-}
-else
-{
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/saturn.api/swagger/v1/swagger.json", "SaturnCalculator.api v1"));
-}
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseRouting();
