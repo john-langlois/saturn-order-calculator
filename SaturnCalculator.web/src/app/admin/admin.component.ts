@@ -27,8 +27,8 @@ export class AdminComponent implements OnInit {
   }
 
   public async getSettings(){
-    //this.orderInfoArr = await this.ordersService.GetAllOrderInfo();
-    this.orderInfoArr = this.configService.orderInfo;
+    this.orderInfoArr = await this.ordersService.GetAllOrderInfo();
+   //this.orderInfoArr = this.configService.orderInfo;
   }
 
   public openEditSetting(item:OrderInfo, isNew:boolean){
@@ -50,11 +50,11 @@ export class AdminComponent implements OnInit {
 
   public async saveSettings(item:any){
     console.log(item)
-  //   let res = await this.ordersService.UpsertOrderInfo(item);
-  //   if(res > 0){
-  //     this.toast.success("Setting Saved");
-  //     this.getSettings();
-  //   }
+    let res = await this.ordersService.UpsertOrderInfo(item);
+    if(res > 0){
+      this.toast.success("Setting Saved");
+      this.getSettings();
+    }
    }
 
 }
