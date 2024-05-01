@@ -6,5 +6,5 @@ public class CalculatedLineItems
     public string VendorItemNumber { get; set; }
     public string ShippedQuantity { get; set; }
     public string ItemCost { get; set; }
-    public int TotalCost { get; set; }
+    public float TotalCost { get; set; }
 }

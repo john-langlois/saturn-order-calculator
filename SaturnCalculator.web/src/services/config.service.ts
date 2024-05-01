@@ -4,6 +4,7 @@ import { lastValueFrom, Observable } from "rxjs";
 import { environment } from "../environments/environment";
 import { Config } from "../models/Config";
 import { Orders } from "../models/Orders";
+import { OrderInfo } from "../models/OrderInfo";
 
 @Injectable({
 	providedIn: "root"
@@ -14,6 +15,7 @@ export class ConfigService {
 
 	public APIURL!: string;
 	public order!: Orders;
+	public orderInfo!:OrderInfo[];
 
 	constructor(private http: HttpClient) {
 		if (environment.production) {
@@ -31,6 +33,7 @@ export class ConfigService {
 				let data = await lastValueFrom(this.config);
 				this.APIURL = data.APIURL;
 				this.order =data.Order;
+				this.orderInfo = data.OrderInfo;
 				resolve();
 			} catch {
 				reject();

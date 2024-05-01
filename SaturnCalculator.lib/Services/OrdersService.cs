@@ -63,22 +63,22 @@ public class OrdersService: IOrdersInterface
                 Orders.TotalPackageCount = range.Cell("D6").Value.ToString();
 
                 IEnumerable<Part> allParts = await parts.GetPartsFromSheet(file);
-                IEnumerable<PartInfo> allPartInfo = await partInfo.GetAllPartInfo(file);
+                IEnumerable<OrderInfo> allOrderInfo = await db.SQLGetAllOrderInfo();
                 List<CalculatedLineItems> lineItems = new List<CalculatedLineItems>();
                 List<CalculatedVendorItem> vendorItems = new List<CalculatedVendorItem>();
                 
                 var distinctArray = allParts.GroupBy(elem=>elem.VendorItemNumber).Select(group=>group.First()).ToList();
                 
-                PartInfo singlePartInfo;
+                OrderInfo singleOrderInfo;
                 foreach (var item in allParts)
                 {
                     CalculatedLineItems lineItem = new CalculatedLineItems();
-                    singlePartInfo = allPartInfo.First(x => x.VendorItemNumber == item.VendorItemNumber);
+                    singleOrderInfo = allOrderInfo.First(x => x.VendorItemNo == item.VendorItemNumber);
                     lineItem.VendorItemNumber = item.VendorItemNumber;
                     lineItem.SerialNo = item.SerialNo;
                     lineItem.ShippedQuantity = item.ShippedQuantity;
-                    lineItem.ItemCost = singlePartInfo.ItemCost;
-                    lineItem.TotalCost = int.Parse(singlePartInfo.ItemCost) * int.Parse(item.ShippedQuantity);
+                    lineItem.ItemCost = singleOrderInfo.PPU.ToString();
+                    lineItem.TotalCost = (singleOrderInfo.PPU * float.Parse(item.ShippedQuantity));
                     lineItems.Add(lineItem);
                     Orders.OrderCost += lineItem.TotalCost;
                     Orders.OrderQuantity += int.Parse(lineItem.ShippedQuantity);

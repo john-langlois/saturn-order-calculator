@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
     ) { }
 
   public async ngOnInit() {
-    
+    this.order = this.configService.order;
   }
 
   handleFileInput(event: Event): void {

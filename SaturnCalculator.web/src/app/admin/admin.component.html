@@ -1,0 +1,38 @@
+<app-navbar [header]="'Home'" [link]="'home'"></app-navbar>
+<div class="container py-3">
+    <div class="d-flex justify-content-end p-2">
+        <button class="btn btn-outline-primary" (click)="openEditSetting(editObj, true)">Add New</button>
+    </div>
+    <div class="row flex-column-reverse flex-lg-row">
+        <div class="col">
+          <div class="table-responsive" style="height: 70vh;overflow-y: scroll;">
+            <table class="table table-striped">
+              <thead class="table-border sticky-top">
+                <tr class="text-center">
+                  <th scope="col">ID</th>
+                  <th scope="col">Vendor Item No</th>
+                  <th scope="col">PO Number</th>
+                  <th scope="col">Job Number</th>
+                  <th scope="col">Price Per Unit</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="table-border">
+                <tr class="text-center align-middle display-6 fs-6" *ngFor="let item of orderInfoArr;index as i">
+                  <td>{{item.id}}</td>
+                  <td>{{item.vendorItemNo}}</td>
+                  <td>{{item.poNo}}</td>
+                  <td>{{item.jobNo}}</td>
+                  <td>{{item.ppu}}</td>
+                  <td class="overflow-hidden border-top">
+                      <button type="button" class="btn btn-outline-primary btn-sm" (click)="openEditSetting(item, false)">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+</div>

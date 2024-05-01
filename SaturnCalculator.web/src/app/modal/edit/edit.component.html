@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h4 class="modal-title">Edit Model</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body" style="max-height: 50vh; overflow-y: scroll;">
+    <div class="row py-3">
+      <div class="col">
+        <h1 class="display-6 fs-5">Property</h1>
+      </div>
+      <div class="col">
+        <h1 class="display-6 fs-5">Value</h1>
+      </div>
+    </div>
+      <div class="row py-1 align-items-center" *ngFor="let item of objProperties;index as i">
+        <div class="col-3">
+          <input type="input" class="form-control" [(ngModel)]="item.key">
+        </div>
+        <div class="col">
+          <div class="input-group">
+            <ng-container [ngSwitch]="objPropretyTypes[i].value">
+              <input class="form-control" *ngSwitchCase="'number'" type="number" id="value" [(ngModel)]="item.value">
+              <input class="form-control" *ngSwitchCase="'string'" type="text" id="value" [(ngModel)]="item.value">
+              <select class="form-select" *ngSwitchCase="'boolean'" id="value" [(ngModel)]="item.value">
+                <option [ngValue]="null" disabled>Select a value</option>
+                <option [ngValue]="true">True</option>
+                <option [ngValue]="false">False</option>
+              </select>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+  
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-success" (click)="saveObj()">Save</button>
+  </div>
+  
