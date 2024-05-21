@@ -64,6 +64,7 @@ public class OrdersService: IOrdersInterface
 
                 IEnumerable<Part> allParts = await parts.GetPartsFromSheet(file);
                 IEnumerable<OrderInfo> allOrderInfo = await db.SQLGetAllOrderInfo();
+                
                 List<CalculatedLineItems> lineItems = new List<CalculatedLineItems>();
                 List<CalculatedVendorItem> vendorItems = new List<CalculatedVendorItem>();
                 
@@ -73,17 +74,19 @@ public class OrdersService: IOrdersInterface
                 foreach (var item in allParts)
                 {
                     CalculatedLineItems lineItem = new CalculatedLineItems();
-                    singleOrderInfo = allOrderInfo.First(x => x.VendorItemNo == item.VendorItemNumber);
+                    //Filter single part By part number where substring is included in part list
+                    singleOrderInfo = allOrderInfo.First(x=> item.VendorItemNumber.Contains(x.PartNo));
                     lineItem.VendorItemNumber = item.VendorItemNumber;
                     lineItem.SerialNo = item.SerialNo;
                     lineItem.ShippedQuantity = item.ShippedQuantity;
                     lineItem.ItemCost = singleOrderInfo.PPU.ToString();
-                    lineItem.TotalCost = (singleOrderInfo.PPU * float.Parse(item.ShippedQuantity));
+                    lineItem.TotalCost = double.Round(singleOrderInfo.PPU * double.Parse(item.ShippedQuantity),2);
                     lineItems.Add(lineItem);
                     Orders.OrderCost += lineItem.TotalCost;
                     Orders.OrderQuantity += int.Parse(lineItem.ShippedQuantity);
                     
                 }
+                Orders.OrderCost = double.Round(Orders.OrderCost,2);
                 Orders.LineItems = lineItems;
                 
                 
@@ -99,12 +102,11 @@ public class OrdersService: IOrdersInterface
                        vendorPart.TotalCost += part.TotalCost;
                        vendorPart.TotalQuantity += int.Parse(part.ShippedQuantity);
                    }
+
+                   vendorPart.TotalCost = double.Round(vendorPart.TotalCost, 2);
                    vendorItems.Add(vendorPart);
                 }
-
                 Orders.VendorItems = vendorItems;
-
-
             }
         }
         catch (Exception ex)

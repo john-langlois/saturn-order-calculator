@@ -34,7 +34,7 @@ export class AdminComponent implements OnInit {
   public openEditSetting(item:OrderInfo, isNew:boolean){
     this.isEditing = true;
     if(isNew){
-      this.editObj = {id:0,jobNo:"",poNo:"",ppu:0,vendorItemNo:""};
+      this.editObj = {id:0,jobNo:"",poNo:"",ppu:0,partNo:"",companyCode:"",companyName:"",coilBlankPrice:0,coilBlankUnitType:"",partName:""};
     }
     else{
       this.editObj = item;

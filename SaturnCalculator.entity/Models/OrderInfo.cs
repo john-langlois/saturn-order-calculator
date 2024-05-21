@@ -11,7 +11,12 @@ namespace SaturnCalculator.entity.Models
         public int ID { get; set; }
         public string JobNo { get; set; }
         public string PoNo { get; set; }
-        public float PPU { get; set; }
-        public string VendorItemNo { get; set; }
+        public double PPU { get; set; }
+        public string PartNo { get; set; }
+        public string PartName { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyCode { get; set; }
+        public double CoilBlankPrice { get; set; }
+        public string CoilBlankUnitType { get; set; }
     }
 }

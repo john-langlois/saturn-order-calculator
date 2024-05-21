@@ -14,8 +14,8 @@ public class Orders
     public string Weight { get; set; }
     public string PackageType { get; set; }
     public string TotalPackageCount { get; set; }
-    public float OrderQuantity { get; set; }
-    public float OrderCost { get; set; }
+    public double OrderQuantity { get; set; }
+    public double OrderCost { get; set; }
     public List<CalculatedLineItems> LineItems { get; set; }
     public List<CalculatedVendorItem> VendorItems { get; set; }
 }

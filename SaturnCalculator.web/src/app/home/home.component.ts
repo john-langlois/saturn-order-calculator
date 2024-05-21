@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
     ) { }
 
   public async ngOnInit() {
-    this.order = this.configService.order;
   }
 
   handleFileInput(event: Event): void {
@@ -46,13 +45,11 @@ export class HomeComponent implements OnInit {
       console.log(this.order)
     }
   }
-
-  exportToCSV() {
-    this.csvService.exportToCSV(this.order as any, 'calculatedOrders');
-  }
  
-  exportToExcel() {
-    //this.excelService.exportToExcel(this.order as any, 'calculatedOrders');
+  public async exportToExcel() {
+
+    let partInfo = await this.orderService.GetAllOrderInfo();
+    
     const result = [];
     for (const key in this.order) {
         if (typeof (this.order as any)[key] !== 'object' && !Array.isArray((this.order as any)[key])) {
@@ -60,16 +57,8 @@ export class HomeComponent implements OnInit {
             newObj[key] = (this.order as any)[key];
             result.push(newObj);
         }
-    }
-    console.log(result);
-    console.log(this.order.lineItems);
-    console.log(this.order.vendorItems);
-
-    this.excelService.convertToExcel(result, this.order.lineItems, this.order.vendorItems, 'calculatedOrders');
-  }
-
-  exportToPDF() {
-    this.pdfService.exportToPDF(this.order as any, 'calculatedOrders');
+  }  
+    this.excelService.convertToExcel(this.order, partInfo, this.order.vendorItems ,'calculatedOrders');
   }
 
 }

@@ -20,10 +20,14 @@
               <tbody class="table-border">
                 <tr class="text-center align-middle display-6 fs-6" *ngFor="let item of orderInfoArr;index as i">
                   <td>{{item.id}}</td>
-                  <td>{{item.vendorItemNo}}</td>
+                  <td>{{item.partNo}}</td>
+                  <td>{{item.partName}}</td>
                   <td>{{item.poNo}}</td>
                   <td>{{item.jobNo}}</td>
                   <td>{{item.ppu}}</td>
+                  <td>{{item.coilBlankPrice}}/ {{item.coilBlankUnitType}}</td>
+                  <td>{{item.companyName}}</td>
+                  <td>{{item.companyCode}}</td>
                   <td class="overflow-hidden border-top">
                       <button type="button" class="btn btn-outline-primary btn-sm" (click)="openEditSetting(item, false)">
                         <i class="bi bi-pencil"></i>

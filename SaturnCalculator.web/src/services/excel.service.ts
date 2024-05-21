@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
+import { findIndex } from "rxjs";
 import * as XLSX from 'xlsx'; 
+import { Orders } from "../models/Orders";
+import { OrderInfo } from "../models/OrderInfo";
 
 
 @Injectable({
@@ -8,36 +11,31 @@ import * as XLSX from 'xlsx';
 export class ExcelService {
 	constructor() { }
 
-	convertToExcel(properties:any, lineItems:any, vendorItems:any, filename: string) {
+	convertToExcel(properties:Orders, orderInfo:OrderInfo[], vendorItems:any, filename: string) {
 		// Create workbook and worksheet
 		const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-		// Add Properties
-		const propertiesData:any = [];
-		properties.forEach((item:any) => {
-		  propertiesData.push([item.key, item.value]);
-		});
-	
 		// INVOICE SHEET
-		const invoiceHeaders = ['CNTBTCH','CNTITEM','IDCUST','IDINV','IDSHPT','SPECINST','TEXTTRX','IDTRX','ORDRNBR','CUSTPO','INVDESC','DATEINVC','CODECURN','EXCHRATEHC','TERMCODE','INVCTYPE'];
+		const invoiceHeaders = ["CNTBTCH", "CNTITEM", "IDCUST", "IDINVC", "IDSHPT", "SPECINST", "TEXTTRX", "IDTRX", "ORDRNBR", "CUSTPO", "INVCDESC", "DATEINVC", "CODECURN", "EXCHRATEHC", "TERMCODE", "INVCTYPE"];
 		const invoiceData = [invoiceHeaders];
-		lineItems.forEach((item:any) => {
-			invoiceData.push([item.serialNo, item.vendorItemNumber, item.shippedQuantity, item.itemCost, item.totalCost]);
-		});
+		invoiceData.push(["0","1","",properties.billLandingNo.replace("SH","IN"),properties.billLandingNo.replace("SH","IN"),`BOL #: ${properties.billLandingNo}`,"1","14","",`PO # ${properties.poNumber}`,"",`${properties.shipDate}`,"","0","","0"])
 
-		// Add Vendor Items
-		const invoiceDetailsHeader = ['CNTBTCH','CNTITEM','CNTLINE','IDITEM','IDDIST','TEXTDESC','UNITMEAS','QTYINVC','AMTCOST','AMTPRIC','AMTEXTN','AMTCOGS','COMMENT'];
+		// Invoice Details
+		const invoiceDetailsHeader = ["CNTBTCH", "CNTITEM", "CNTLINE", "IDITEM", "IDDIST", "TEXTDESC", "UNITMEAS", "QTYINVC", "AMTCOST", "AMTPRIC", "AMTEXTN", "AMTCOGS", "COMMENT"];
 		const invoiceDetailsData = [invoiceDetailsHeader];
-		vendorItems.forEach((item:any) => {
-			invoiceDetailsData.push([0,1,item.totalQuantity,item.vendorItemNumber, item.vendorItemNumber,'',0,(item.totalCost/item.totalQuantity)]);
+		orderInfo.forEach((orderInfo:OrderInfo) => {
+			vendorItems.forEach((item:any) => {
+				if(item.vendorItemNumber.includes(orderInfo.partNo)){
+					invoiceDetailsData.push([0,1,item.totalQuantity,"","",`${item.vendorItemNumber}, ${item.totalQuantity} Pcs,  Part Name${orderInfo.partName}`, `${item.vendorItemNumber}, ${item.totalQuantity} Pcs,  Part Name: ${orderInfo.partName}`,0,0,0,item.totalCost,0,`Job #: ${orderInfo.jobNo}, U/P: ${orderInfo.ppu}`]);
+				}
+			});
 		});
+		
 
-		// Add Vendor Items
-		const invoicePaymentHeader = ['CNTBTCH','CNTITEM','IDITEM','IDDIST','TEXTDESC','UNITMEAS','QTYINVC','AMTCOST','AMTPRIC','AMTEXTN','AMTCOGS','COMMENT'];
-		const invoicePaymentData = [invoiceDetailsHeader];
-		vendorItems.forEach((item:any) => {
-			invoicePaymentData.push([item.vendorItemNumber, item.totalQuantity, item.totalCost]);
-		});
+		// Invoice Payment Schedules
+		const invoicePaymentHeader = ["CNTBTCH", "CNTITEM", "CNTPAYM", "DATEDUE", "AMTDUE", "DATEDISC", "AMTDISC", "AMTDUEHC", "AMTDISCHC"];
+		const invoicePaymentData = [invoicePaymentHeader];
+			invoicePaymentData.push(["0","1","1","",properties.orderCost,"",properties.orderCost,"",properties.orderCost]);
 
 		
 	
@@ -50,6 +48,20 @@ export class ExcelService {
 
 		const invoicePaymentSchedules: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(invoicePaymentData);
 		XLSX.utils.book_append_sheet(wb, invoicePaymentSchedules, 'Invoice_Payment_Schedules');
+
+		 // Define named ranges
+		 const namedRanges = [
+			{ name: 'Invoices', sheet: 'Invoices', ref: XLSX.utils.encode_range({s: {c: 0, r: 0}, e: {c: invoiceHeaders.length - 1, r: invoiceData.length - 1}}) },
+			{ name: 'Invoice_Details', sheet: 'Invoice_Details', ref: XLSX.utils.encode_range({s: {c: 0, r: 0}, e: {c: invoiceDetailsHeader.length - 1, r: invoiceDetailsData.length - 1}}) },
+			{ name: 'Invoice_Payment_Schedules', sheet: 'Invoice_Payment_Schedules', ref: XLSX.utils.encode_range({s: {c: 0, r: 0}, e: {c: invoicePaymentHeader.length - 1, r: invoicePaymentData.length - 1}}) }
+		  ];
+	  
+		  // Add named ranges to the workbook
+		  if (!wb.Workbook) wb.Workbook = { Names: [] };
+		  wb.Workbook.Names = namedRanges.map(range => ({
+			Name: range.name,
+			Ref: `'${range.sheet}'!${range.ref}`
+		  }));
 	
 		// Save the workbook as an Excel file
 		XLSX.writeFile(wb, filename + '.xlsx');
