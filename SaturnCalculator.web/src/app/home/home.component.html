@@ -1,7 +1,7 @@
 
 <app-navbar [header]="'Admin'" [link]="'admin'"></app-navbar>
 <div class="container-fluid p-3">
-    <app-datatable [dataArray]="orders" [dataColumns]="dataColumns" (selectedItemChange)="toggleSelectedItem($event)">
+    <app-datatable [options]="pageConfig" [dataArray]="orders" [dataColumns]="dataColumns" (selectedItemChange)="toggleSelectedItem($event)">
         <div class="buttons px-3">
             <button class="btn btn-success me-2" [routerLink]="'/edit/'+selectedItem" [disabled]="!selectedItem"><i class="bi bi-pencil pe-2"></i>Edit</button>
             <button class="btn btn-primary" [routerLink]="'/upload'">Add New</button>
