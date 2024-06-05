@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using SaturnCalculator.lib.Interfaces;
+using DocumentFormat.OpenXml.Office.CustomUI;
 
 namespace SaturnCalculator.lib.Repositories
 {
@@ -85,12 +86,38 @@ namespace SaturnCalculator.lib.Repositories
                 { "orderQuantity", ins.OrderQuantity},
                 { "@orderCost", ins.OrderCost}
             });
+
             parameters.Add("@insertedID", 0, direction: ParameterDirection.Output);
             try
             {
                 using IDbConnection db = new SqlConnection(ConnectionString);
                 await db.ExecuteAsync("[hist].p_Orders_UPSERT", parameters, commandType: CommandType.StoredProcedure);
-                insertedID = parameters.Get<int?>("@insertedID");
+                insertedID = parameters.Get<int?>("@insertedID");  
+                foreach(var item in ins.LineItems)
+                {
+                    var lineItemParameters = new DynamicParameters(new Dictionary<string, object> {
+                        { "@id", item.ID },
+                        { "@ordersID",insertedID},
+                        { "@serialNo",item.SerialNo},
+                        { "@vendorItemNumber",item.VendorItemNumber},
+                        { "@shippedQuantity",item.ShippedQuantity},
+                        { "@itemCost",item.ItemCost},
+                        { "@totalCost",item.TotalCost},
+                    });
+                await db.ExecuteAsync("[hist].p_LineItems_UPSERT", lineItemParameters, commandType: CommandType.StoredProcedure);
+                }
+                foreach(var item in ins.VendorItems)
+                {
+                    var vendorParameters = new DynamicParameters(new Dictionary<string, object> {
+                        { "@id", ins.ID },
+                        { "@ordersID",insertedID},
+                        { "@vendorItemNumber",item.VendorItemNumber},
+                        { "@totalQuantity",item.TotalQuantity},
+                        { "@totalCost",item.TotalCost},
+                    });
+                    await db.ExecuteAsync("[hist].p_VendorItems_UPSERT", vendorParameters, commandType: CommandType.StoredProcedure);
+                }
+                
             }
             catch (Exception e)
             {
@@ -113,15 +140,15 @@ namespace SaturnCalculator.lib.Repositories
             }
         }
         
-        public async Task<Orders> SQLGetOrdersByID(int orderID)
+        public async Task<Orders> SQLGetOrdersByID(int ordersID)
         {
             var order = new Orders();
             try
             {
                 using IDbConnection db = new SqlConnection(ConnectionString);
-                order = await db.QueryFirstOrDefaultAsync("[hist].p_Orders_GET",new {orderID}, commandType: CommandType.StoredProcedure);
-                order.LineItems = await db.QueryFirstOrDefaultAsync("[hist].p_LineItems_GET",new {orderID}, commandType: CommandType.StoredProcedure);
-                order.VendorItems = await db.QueryFirstOrDefaultAsync("[hist].p_VendorItems_GET",new {orderID}, commandType: CommandType.StoredProcedure);
+                order = await db.QueryFirstOrDefaultAsync<Orders>("[hist].p_Orders_GET",new { id = ordersID}, commandType: CommandType.StoredProcedure);
+                order.LineItems = await db.QueryAsync<CalculatedLineItems>("[hist].p_LineItems_GET",new {ordersID}, commandType: CommandType.StoredProcedure);
+                order.VendorItems = await db.QueryAsync<CalculatedVendorItem>("[hist].p_VendorItems_GET",new {ordersID}, commandType: CommandType.StoredProcedure);
                 return order;
             }
             catch (Exception e)

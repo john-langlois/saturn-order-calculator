@@ -17,6 +17,6 @@ public class Orders
     public string TotalPackageCount { get; set; }
     public double OrderQuantity { get; set; }
     public double OrderCost { get; set; }
-    public List<CalculatedLineItems> LineItems { get; set; }
-    public List<CalculatedVendorItem> VendorItems { get; set; }
+    public IEnumerable<CalculatedLineItems> LineItems { get; set; }
+    public IEnumerable<CalculatedVendorItem> VendorItems { get; set; }
 }
