@@ -14,51 +14,38 @@ import { ConfigService } from '../../services/config.service';
 })
 export class HomeComponent implements OnInit {
 
-  fileToUpload: File | null = null;
+  public orders:Orders[] = [];
 
-  public order!:Orders;
+  public selectedItem!:number;
+
+  public dataColumns:any[]=[
+    {name:"PO Number",source:"poNumber", type:"text"},
+    {name:"Trading Partner",source:"tradingPartner", type:"text"},
+    {name:"Bill Landing No",source:"billLandingNo", type:"text"},
+    {name:"Tracking No",source:"trackingNo", type:"text"},
+    {name:"Ship Date",source:"shipDate", type:"text"},
+    {name:"Ship Time",source:"shipTime", type:"date"},
+    {name:"Package Type",source:"packageType", type:"date"},
+    {name:"Total Package Count",source:"totalPackageCount", type:"text"},
+    {name:"Order Quantity",source:"orderQuantity", type:"text"},
+    {name:"Order Cost",source:"orderCost", type:"text"}
+  ];
 
   constructor(
-    private orderService:OrdersService,
-    private pdfService:PDFService,
-    private excelService:ExcelService,
-    private csvService:CSVService,
-    private configService:ConfigService
+    private orderService:OrdersService
     ) { }
 
   public async ngOnInit() {
+    await this.getOrders();
   }
 
-  handleFileInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const files = target.files;
-    if (files && files.length > 0) {
-      this.fileToUpload = files.item(0);
-    }
+  public async getOrders(){
+    //this.orders = await this.orderService.GetAllOrders();
   }
 
-  async getCalculatedOrders(){
-    if(this.fileToUpload){
-      let formData = new FormData();
-      formData.append('file', this.fileToUpload);
-      this.order = await this.orderService.GetOrderInfoFromFile(formData);
-      console.log(this.order)
-    }
+  public toggleSelectedItem(id:number){
+    this.selectedItem = id;
   }
- 
-  public async exportToExcel() {
-
-    let partInfo = await this.orderService.GetAllOrderInfo();
-    
-    const result = [];
-    for (const key in this.order) {
-        if (typeof (this.order as any)[key] !== 'object' && !Array.isArray((this.order as any)[key])) {
-            const newObj:any = {};
-            newObj[key] = (this.order as any)[key];
-            result.push(newObj);
-        }
-  }  
-    this.excelService.convertToExcel(this.order, partInfo, this.order.vendorItems ,'calculatedOrders');
-  }
+  
 
 }

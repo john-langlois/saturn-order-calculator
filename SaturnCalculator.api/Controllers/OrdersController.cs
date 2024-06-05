@@ -37,4 +37,16 @@ public class OrdersController : ControllerBase
     [HttpGet]
     [Route("[controller]/GetAllOrderInfo")]
     public async Task<IEnumerable<OrderInfo>> GetAllOrderInfo() => await this.iDB.GetAllOrderInfo();
+    
+    [HttpPost]
+    [Route("[controller]/UpsertOrder")]
+    public async Task<int> UpsertOrder(Orders item) => await this.iDB.UpsertOrder(item);
+
+    [HttpGet]
+    [Route("[controller]/GetAllOrders")]
+    public async Task<IEnumerable<Orders>> GetAllOrders() => await this.iDB.GetAllOrders();
+    
+    [HttpGet]
+    [Route("[controller]/GetOrdersByID/{id}")]
+    public async Task<Orders> GetOrdersByID(int id) => await this.iDB.GetOrdersByID(id);
 }

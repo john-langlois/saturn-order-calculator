@@ -10,10 +10,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using SaturnCalculator.lib.Interfaces;
 
 namespace SaturnCalculator.lib.Repositories
 {
-    public class SQLRepository
+    public class SQLRepository:ISQLRepository
     {
         private readonly string ConnectionString;
         public SQLRepository(IOptionsMonitor<AppSettings> options) {
@@ -56,61 +57,72 @@ namespace SaturnCalculator.lib.Repositories
             {
                 using IDbConnection db = new SqlConnection(ConnectionString);
                 return await db.QueryAsync<OrderInfo>("[ref].p_OrderInfo_GET", commandType: CommandType.StoredProcedure);
-                // return new List<OrderInfo>()
-                // {
-                //     new OrderInfo()
-                //     {
-                //         ID = 1,
-                //         PartNo = "3394",
-                //         PPU = 12.7086,
-                //         CompanyCode = "1151",
-                //         CompanyName = "Formet",
-                //         JobNo = "PR0029",
-                //         PoNo = "5500115185",
-                //         CoilBlankPrice = 0.8795,
-                //         CoilBlankUnitType = "kg",
-                //         PartName = "Bottom Housing"
-                //     },
-                //     new OrderInfo()
-                //     {
-                //         ID = 2,
-                //         PartNo = "3393",
-                //         PPU = 8.1864,
-                //         CompanyCode = "1151",
-                //         CompanyName = "Formet",
-                //         JobNo = "PR0028",
-                //         PoNo = "5500115184",
-                //         CoilBlankPrice = 0.8735,
-                //         CoilBlankUnitType = "kg",
-                //         PartName = "Top Shield"
-                //     },
-                //     new OrderInfo()
-                //     {
-                //         ID = 3,
-                //         PartNo = "G2104",
-                //         PPU = 9.5191,
-                //         CompanyCode = "1151",
-                //         CompanyName = "Formet",
-                //         JobNo = "PR0033",
-                //         PoNo = "5500167707",
-                //         CoilBlankPrice = 0.6320,
-                //         CoilBlankUnitType = "lb",
-                //         PartName = "Reinf Quarter Panel RH"
-                //     },
-                //     new OrderInfo()
-                //     {
-                //         ID = 4,
-                //         PartNo = "G2105",
-                //         PPU = 9.5188,
-                //         CompanyCode = "1151",
-                //         CompanyName = "Formet",
-                //         JobNo = "PR0033",
-                //         PoNo = "5500167708",
-                //         CoilBlankPrice = 0.6320,
-                //         CoilBlankUnitType = "lb",
-                //         PartName = "Reinf Quarter Panel LH"
-                //     }
-                // };
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task<int> SQLUpsertOrder(Orders ins)
+        {
+            int? insertedID = 0;
+
+            var parameters = new DynamicParameters(new Dictionary<string, object> {
+                { "@id", ins.ID },
+                { "@tradingPartner",ins.TradingPartner},
+                { "@poNumber",ins.PONumber},
+                { "@trailerNumber",ins.TrailerNumber},
+                { "@billLandingNo",ins.BillLandingNo},
+                { "@trackingNo", ins.TrackingNo},
+                { "@shipToCode",ins.ShipToCode},
+                { "@carrierCode",ins.CarrierCode},
+                { "@shipDate",ins.ShipDate},
+                { "@shipTime",ins.ShipTime},
+                { "@weight", ins.Weight},
+                { "@packageType", ins.PackageType},
+                { "@totalPackageCount", ins.TotalPackageCount},
+                { "orderQuantity", ins.OrderQuantity},
+                { "@orderCost", ins.OrderCost}
+            });
+            parameters.Add("@insertedID", 0, direction: ParameterDirection.Output);
+            try
+            {
+                using IDbConnection db = new SqlConnection(ConnectionString);
+                await db.ExecuteAsync("[hist].p_Orders_UPSERT", parameters, commandType: CommandType.StoredProcedure);
+                insertedID = parameters.Get<int?>("@insertedID");
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+            return insertedID ?? ins.ID;
+        }
+        
+        public async Task<IEnumerable<Orders>> SQLGetAllOrders()
+        {
+            var id = 0;
+            try
+            {
+                using IDbConnection db = new SqlConnection(ConnectionString);
+                return await db.QueryAsync<Orders>("[hist].p_Orders_GET",new {id}, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task<Orders> SQLGetOrdersByID(int orderID)
+        {
+            var order = new Orders();
+            try
+            {
+                using IDbConnection db = new SqlConnection(ConnectionString);
+                order = await db.QueryFirstOrDefaultAsync("[hist].p_Orders_GET",new {orderID}, commandType: CommandType.StoredProcedure);
+                order.LineItems = await db.QueryFirstOrDefaultAsync("[hist].p_LineItems_GET",new {orderID}, commandType: CommandType.StoredProcedure);
+                order.VendorItems = await db.QueryFirstOrDefaultAsync("[hist].p_VendorItems_GET",new {orderID}, commandType: CommandType.StoredProcedure);
+                return order;
             }
             catch (Exception e)
             {

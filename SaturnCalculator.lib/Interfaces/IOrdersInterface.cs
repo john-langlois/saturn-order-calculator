@@ -9,6 +9,10 @@ public interface IOrdersInterface
 
     public Task<IEnumerable<OrderInfo>> GetAllOrderInfo();
     public Task<int> UpsertOrderInfo(OrderInfo ins);
+    
+    public Task<int> UpsertOrder(Orders ins);
+    public Task<IEnumerable<Orders>> GetAllOrders();
+    public Task<Orders> GetOrdersByID(int orderID);
 
 
     } 

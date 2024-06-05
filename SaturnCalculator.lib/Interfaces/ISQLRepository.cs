@@ -10,6 +10,12 @@ namespace SaturnCalculator.lib.Interfaces
     public interface ISQLRepository
     {
         public Task<IEnumerable<OrderInfo>> SQLGetAllOrderInfo();
-        public Task<int> SQLUpsertOrderInfo();
+        public Task<int> SQLUpsertOrderInfo(OrderInfo ins);
+
+        public Task<int> SQLUpsertOrder(Orders ins);
+        public Task<IEnumerable<Orders>> SQLGetAllOrders();
+        public Task<Orders> SQLGetOrdersByID(int orderID);
+
+
     }
 }

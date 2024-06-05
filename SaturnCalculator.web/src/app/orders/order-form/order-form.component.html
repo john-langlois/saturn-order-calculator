@@ -1,0 +1,156 @@
+<div class="row">
+    <div class="col">
+      <h3>Order Details</h3>
+      <div class="card" style="height: 60vh;overflow-y: scroll;">
+        <div class="card-body">
+          <div class="row">
+              <div class="col">
+                  <div class="form-group">
+                      <label for="tradingPartner">Trading Partner</label>
+                      <input type="text" class="form-control" id="tradingPartner" [value]="order.tradingPartner" >
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="poNumber">PO Number</label>
+                      <input type="text" class="form-control" id="poNumber" [value]="order.poNumber" >
+                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <div class="form-group">
+                      <label for="tradingPartner">Trailer Number</label>
+                      <input type="text" class="form-control" id="tradingPartner" [value]="order.trailerNumber" >
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="poNumber">Bill Landing Number</label>
+                      <input type="text" class="form-control" id="poNumber" [value]="order.billLandingNo">
+                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <div class="form-group">
+                      <label for="tradingPartner">Tracking Number</label>
+                      <input type="text" class="form-control" id="tradingPartner" [value]="order.trackingNo" >
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="poNumber">Ship to Code</label>
+                      <input type="text" class="form-control" id="poNumber" [value]="order.shipToCode">
+                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <div class="form-group">
+                      <label for="tradingPartner">Carrier Code</label>
+                      <input type="text" class="form-control" id="tradingPartner" [value]="order.carrierCode" >
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="poNumber">Ship Date</label>
+                      <input type="text" class="form-control" id="poNumber" [value]="order.shipDate">
+                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <div class="form-group">
+                      <label for="tradingPartner">Ship time</label>
+                      <input type="text" class="form-control" id="tradingPartner" [value]="order.shipTime" >
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="poNumber">Weight (lbs)</label>
+                      <input type="text" class="form-control" id="poNumber" [value]="order.weight">
+                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <div class="form-group">
+                      <label for="tradingPartner">Package Type</label>
+                      <input type="text" class="form-control" id="tradingPartner" [value]="order.packageType" >
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="poNumber">Total Package Count</label>
+                      <input type="text" class="form-control" id="poNumber" [value]="order.totalPackageCount">
+                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <div class="form-group">
+                      <label for="tradingPartner">Order Quantity</label>
+                      <input type="text" class="form-control" id="tradingPartner" [value]="order.orderQuantity" >
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="poNumber">Order Cost</label>
+                      <input type="text" class="form-control" id="poNumber" [value]="order.orderCost">
+                    </div>
+              </div>
+          </div>
+          <div class="row p-2">
+              <div class="card">
+                  <ul class="list-group list-group-flush" >
+                      <li class="list-group-item list-group-item-light">
+                          <div class="row">
+                              <div class="col">Vendor Item Number</div>
+                              <div class="col">Total Quantity</div>
+                              <div class="col">Total Cost</div>
+                          </div>
+                      </li>
+                    <li class="list-group-item" *ngFor="let item of order.vendorItems">
+                      <div class="input-group">
+                          <input type="text" class="form-control" value="{{item.vendorItemNumber}}">
+                          <input type="text" class="form-control" value="{{item.totalQuantity}}">
+                          <input type="text" class="form-control" value="$ {{item.totalCost}}">
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="col">
+      <h3>Line Items</h3>
+      <div class="card" style="overflow-y:scroll;height: 60vh;">
+         <div class="card-body">
+      <div >
+          <table class="table table-striped">
+          <thead class="sticky-top">
+              <tr>
+              <th>Serial No</th>
+              <th>Part Number</th>
+              <th>Shipped Quantity</th>
+              <th>Item Cost</th>
+              <th>Total Cost</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let item of order.lineItems">
+              <td>{{ item.serialNo }}</td>
+              <td>{{ item.vendorItemNumber }}</td>
+              <td>{{ item.shippedQuantity }}</td>
+              <td>$ {{ item.itemCost }}</td>
+              <td>$ {{ item.totalCost }}</td>
+              </tr>
+          </tbody>
+          </table>
+      </div>
+      </div> 
+      </div>
+  </div>        
+</div> 

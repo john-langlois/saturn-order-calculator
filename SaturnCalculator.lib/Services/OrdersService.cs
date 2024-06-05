@@ -26,6 +26,10 @@ public class OrdersService: IOrdersInterface
 
     public Task<IEnumerable<OrderInfo>> GetAllOrderInfo() =>db.SQLGetAllOrderInfo();
     public Task<int> UpsertOrderInfo(OrderInfo ins) => db.SQLUpsertOrderInfo(ins);
+
+    public Task<int> UpsertOrder(Orders ins) => db.SQLUpsertOrder(ins);
+    public Task<IEnumerable<Orders>> GetAllOrders()=> db.SQLGetAllOrders();
+    public Task<Orders> GetOrdersByID(int orderID) => db.SQLGetOrdersByID(orderID);
     public async Task<Orders> CalculateOrderTotal(IFormFile file)
     {
         Orders Orders = new Orders();

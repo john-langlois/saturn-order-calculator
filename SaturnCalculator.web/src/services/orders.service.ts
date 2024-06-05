@@ -22,4 +22,15 @@ export class OrdersService {
 	public UpsertOrderInfo(ins:OrderInfo) {
 		return lastValueFrom(this.http.post<any>(this.configService.APIURL +`/Orders/UpsertOrderInfo`,ins));
 	}
+
+	public GetAllOrders() {
+		return lastValueFrom(this.http.get<Orders[]>(this.configService.APIURL +`/Orders/GetAllOrders`));
+	}
+	public GetOrdersByID(id:number) {
+		return lastValueFrom(this.http.get<Orders>(this.configService.APIURL +`/Orders/GetOrdersByID/${id}`));
+	}
+
+	public UpsertOrders(ins:Orders) {
+		return lastValueFrom(this.http.post<any>(this.configService.APIURL +`/Orders/UpsertOrder`,ins));
+	}
 }

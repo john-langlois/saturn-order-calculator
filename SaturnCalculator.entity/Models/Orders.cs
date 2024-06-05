@@ -2,6 +2,7 @@
 
 public class Orders
 {
+    public int ID { get; set; }
     public string TradingPartner { get; set; }
     public string PONumber { get; set; }
     public string TrailerNumber { get; set; }
