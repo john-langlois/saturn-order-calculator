@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
   }
 
   public async getOrders(){
-    //this.orders = await this.orderService.GetAllOrders();
+    this.orders = await this.orderService.GetAllOrders();
   }
 
   public toggleSelectedItem(id:number){
