@@ -3,6 +3,7 @@ import { Orders } from '../../models/Orders';
 import { OrdersService } from '../../services/orders.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { EmailService } from '../../services/email.service';
 
 @Component({
   selector: 'app-upload',
@@ -17,7 +18,8 @@ export class UploadComponent implements OnInit {
   constructor(
     private orderService:OrdersService,
     private toastr:ToastrService,
-    private router:Router
+    private router:Router,
+    private emailService:EmailService
     ) { }
 
   public async ngOnInit() {
@@ -42,7 +44,15 @@ export class UploadComponent implements OnInit {
  
   public async uploadAndEmailOrder() {
     let res = await this.orderService.UpsertOrders(this.order);
+    let formData = new FormData();
+    Object.keys(this.order).forEach(key =>{
+      formData.append('Orders.' + key, this.order[key as keyof Orders] as string);
+    });
+    if(this.fileToUpload){
+      formData.append('Attachment', this.fileToUpload);
+    }
     if(res > 0){
+      await this.emailService.SendEmail(formData);
       this.toastr.success("Order Uploaded");
       this.router.navigate(['/home']);
     }

@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.Extensions.Options;
+using SaturnCalculator.entity.Models;
 using SaturnCalculator.lib.Interfaces;
 using SaturnCalculator.lib.Models;
 using SaturnCalculator.lib.Services;
@@ -12,6 +13,7 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("Connec
 builder.Services.AddSingleton<IPartsInterface, PartService>(x => new PartService(x.GetRequiredService<IOptionsMonitor<AppSettings>>()));
 builder.Services.AddSingleton<IOrdersInterface, OrdersService>(x => new OrdersService(x.GetRequiredService<IOptionsMonitor<AppSettings>>(), x.GetRequiredService<IPartsInterface>(),x.GetRequiredService<IPartInfoInterface>()));
 builder.Services.AddSingleton<IPartInfoInterface, PartInfoService>(x => new PartInfoService(x.GetRequiredService<IOptionsMonitor<AppSettings>>()));
+builder.Services.AddSingleton<IEmailService, EmailService>(x => new EmailService(x.GetRequiredService<IOptionsMonitor<AppSettings>>()));
 
 
 
