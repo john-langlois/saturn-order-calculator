@@ -64,7 +64,9 @@ export class ExcelService {
 		  }));
 	
 		// Save the workbook as an Excel file
-		XLSX.writeFile(wb, filename + '.xlsx');
+
+		var file = new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' })], { type: 'application/octet-stream' });
+		return file;
 	  }
 	
 }

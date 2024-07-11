@@ -40,15 +40,7 @@ export class ViewOrderComponent implements OnInit {
   public async exportToExcel() {
 
     let partInfo = await this.ordersService.GetAllOrderInfo();
-    
-    const result = [];
-    for (const key in this.order) {
-        if (typeof (this.order as any)[key] !== 'object' && !Array.isArray((this.order as any)[key])) {
-            const newObj:any = {};
-            newObj[key] = (this.order as any)[key];
-            result.push(newObj);
-        }
-  }  
+  
     this.excelService.convertToExcel(this.order, partInfo, this.order.vendorItems ,'calculatedOrders');
   }
 

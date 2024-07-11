@@ -4,6 +4,7 @@ import { OrdersService } from '../../services/orders.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { EmailService } from '../../services/email.service';
+import { ExcelService } from '../../services/excel.service';
 
 @Component({
   selector: 'app-upload',
@@ -19,7 +20,8 @@ export class UploadComponent implements OnInit {
     private orderService:OrdersService,
     private toastr:ToastrService,
     private router:Router,
-    private emailService:EmailService
+    private emailService:EmailService,
+    private excelService:ExcelService,
     ) { }
 
   public async ngOnInit() {
@@ -45,16 +47,20 @@ export class UploadComponent implements OnInit {
   public async uploadAndEmailOrder() {
     let res = await this.orderService.UpsertOrders(this.order);
     let formData = new FormData();
-    Object.keys(this.order).forEach(key =>{
-      formData.append('Orders.' + key, this.order[key as keyof Orders] as string);
-    });
-    if(this.fileToUpload){
-      formData.append('Attachment', this.fileToUpload);
-    }
+    
     if(res > 0){
-      await this.emailService.SendEmail(formData);
       this.toastr.success("Order Uploaded");
       this.router.navigate(['/home']);
+      formData.append('OrderID', res);
+
+      let partInfo = await this.orderService.GetAllOrderInfo();
+  
+      var file = this.excelService.convertToExcel(this.order, partInfo, this.order.vendorItems ,'calculatedOrders');
+      
+      formData.append('Attachment', file);
+      
+
+      await this.emailService.SendEmail(formData);
     }
   }
 
