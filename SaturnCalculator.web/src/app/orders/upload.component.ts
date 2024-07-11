@@ -51,7 +51,9 @@ export class UploadComponent implements OnInit {
     if(res > 0){
       this.toastr.success("Order Uploaded");
       this.router.navigate(['/home']);
-      formData.append('OrderID', res);
+      Object.keys(this.order).forEach(key =>{
+        formData.append('Orders.' + key, this.order[key as keyof Orders] as string);
+      });
 
       let partInfo = await this.orderService.GetAllOrderInfo();
   
