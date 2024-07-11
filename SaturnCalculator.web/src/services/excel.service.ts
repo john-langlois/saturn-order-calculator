@@ -62,8 +62,8 @@ export class ExcelService {
 
 		// Save the workbook as an Excel file
 		const fileBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-		const fileBlob = new Blob([fileBuffer], { type: 'application/octet-stream' });
+        const fileBlob = new Blob([fileBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-		return fileBlob;
+        return fileBlob;
 	}
 }
