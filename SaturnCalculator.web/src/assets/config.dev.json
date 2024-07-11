@@ -1,5 +1,8 @@
 {
     "APIURL":"http://localhost:5253",
+    "OrderInfo":
+        [{"id":1,"jobNo":"PR0033","poNo":"5500167707","ppu":9.5191,"partNo":"G2104","partName":"Reinf Quarter Panel RH","companyName":"Formet","companyCode":"1151","coilBlankPrice":0.632,"coilBlankUnitType":"lb"},{"id":2,"jobNo":"PR0028","poNo":"5500115184","ppu":8.1864,"partNo":"3393","partName":"Top Shield","companyName":"Formet","companyCode":"1151","coilBlankPrice":0.8735,"coilBlankUnitType":"kg"},{"id":3,"jobNo":"PR0029","poNo":"5500115185","ppu":12.7086,"partNo":"3394","partName":"Bottom Housing","companyName":"Formet","companyCode":"1151","coilBlankPrice":0.8795,"coilBlankUnitType":"kg"},{"id":4,"jobNo":"PR0033","poNo":"5500167708","ppu":9.5188,"partNo":"G2105","partName":"Reinf Quarter Panel LH","companyName":"Formet","companyCode":"1151","coilBlankPrice":0.632,"coilBlankUnitType":"lb"}]
+    ,
     "Order":{
         "tradingPartner": "Formet",
         "poNumber": "\n",

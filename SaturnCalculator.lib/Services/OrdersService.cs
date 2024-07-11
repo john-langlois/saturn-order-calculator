@@ -103,8 +103,11 @@ public class OrdersService: IOrdersInterface
                    //Get total cost and quantity for grouped vendor item parts
                    foreach (var part in commonParts)
                    {
+                       singleOrderInfo = allOrderInfo.First(x=> item.VendorItemNumber.Contains(x.PartNo));
+
                        vendorPart.TotalCost += part.TotalCost;
                        vendorPart.TotalQuantity += int.Parse(part.ShippedQuantity);
+                       vendorPart.Description = singleOrderInfo.PartName;
                    }
 
                    vendorPart.TotalCost = double.Round(vendorPart.TotalCost, 2);

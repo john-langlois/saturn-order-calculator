@@ -1,4 +1,5 @@
 import { LineItems } from "./LineItems";
+import { OrderInfo } from "./OrderInfo";
 import { VendorItems } from "./VendorItems";
 
 export interface Orders{
@@ -18,4 +19,5 @@ export interface Orders{
     orderCost:string;
     lineItems: LineItems[];
     vendorItems: VendorItems[];
+    OrderInfo: OrderInfo[];
 }

@@ -7,4 +7,5 @@ public class CalculatedVendorItem
     public int TotalQuantity { get; set; }
     public int TotalWeight { get; set; }
     public double TotalCost { get; set; }
+    public string Description { get; set; }
 }

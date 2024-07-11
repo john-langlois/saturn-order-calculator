@@ -3,4 +3,5 @@ export interface VendorItems{
     totalWeight:number;
     totalCost:number;
     totalQuantity:number;
+    description:string;
 }

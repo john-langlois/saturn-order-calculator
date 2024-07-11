@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SaturnCalculator.entity;
 using SaturnCalculator.entity.Models;
 using SaturnCalculator.lib;
@@ -20,7 +21,22 @@ public class EmailController : ControllerBase
     [Route("[controller]/SendEmail")]
     public async Task<int> SendEmail([FromForm] Email email)
     {
-        return await this.iDB.SendConfirmationEmail(email);
+        if (email.OrderInfoJson != null)
+        {
+            email.Orders.OrderInfo = JsonConvert.DeserializeObject<IEnumerable<OrderInfo>>(email.OrderInfoJson);
+        }
+            
+        if (email.VendorItemsJson != null)
+        {
+            email.Orders.VendorItems = JsonConvert.DeserializeObject<IEnumerable<CalculatedVendorItem>>(email.VendorItemsJson);
+        }
+            
+        if (email.LineItemsJson != null)
+        {
+            email.Orders.LineItems = JsonConvert.DeserializeObject<IEnumerable<CalculatedLineItems>>(email.LineItemsJson);
+        }
+
+        return await iDB.SendConfirmationEmail(email);
     }
 
 }

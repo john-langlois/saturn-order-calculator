@@ -109,6 +109,8 @@
                               <div class="col">Vendor Item Number</div>
                               <div class="col">Total Quantity</div>
                               <div class="col">Total Cost</div>
+                              <div class="col">Description</div>
+
                           </div>
                       </li>
                     <li class="list-group-item" *ngFor="let item of order.vendorItems">
@@ -116,6 +118,8 @@
                           <input type="text" class="form-control" value="{{item.vendorItemNumber}}">
                           <input type="text" class="form-control" value="{{item.totalQuantity}}">
                           <input type="text" class="form-control" value="$ {{item.totalCost}}">
+                          <input type="text" class="form-control" value="$ {{item.description}}">
+
                       </div>
                     </li>
                   </ul>
