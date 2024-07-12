@@ -28,8 +28,8 @@ export class ViewOrderComponent implements OnInit {
   ) { }
 
   public async ngOnInit(){
-      //await this.subscribeToCurrentOrder();
-      this.order = this.configService.order;
+      await this.subscribeToCurrentOrder();
+      // this.order = this.configService.order;
 
   }
 
@@ -48,8 +48,7 @@ export class ViewOrderComponent implements OnInit {
     let formData = new FormData();
 
   // Assuming this.configService.orderInfo and this.order.vendorItems are arrays
-  let partInfo = this.configService.orderInfo;
-  this.order.OrderInfo = partInfo; // Note the "Orders." prefix added here
+  this.order.OrderInfo = await this.ordersService.GetAllOrderInfo(); // Note the "Orders." prefix added here
   let vendorItems = this.order.vendorItems; // Note the "Orders." prefix added here
   let lineItems = this.order.lineItems; // Note the "Orders." prefix added here
 
