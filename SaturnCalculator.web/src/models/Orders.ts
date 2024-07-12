@@ -3,6 +3,7 @@ import { OrderInfo } from "./OrderInfo";
 import { VendorItems } from "./VendorItems";
 
 export interface Orders{
+    id:number;
     tradingPartner:string;
     poNumber:string;
     trailerNumber:string;

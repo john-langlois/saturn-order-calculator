@@ -47,6 +47,10 @@ export class UploadComponent implements OnInit {
   public async uploadAndEmailOrder() {
     let formData = new FormData();
 
+    let res = await this.orderService.UpsertOrders(this.order);
+    if(res > 0){
+      this.order.id = res;
+
     // Assuming this.configService.orderInfo and this.order.vendorItems are arrays
     this.order.OrderInfo = await this.orderService.GetAllOrderInfo(); // Note the "Orders." prefix added here
     let vendorItems = this.order.vendorItems; // Note the "Orders." prefix added here
@@ -68,11 +72,13 @@ export class UploadComponent implements OnInit {
     // Append the Excel file as binary data with appropriate metadata
     var file = this.excelService.convertToExcel(this.order, this.order.OrderInfo, vendorItems, 'calculatedOrders');
     formData.append('Attachment', file, 'calculatedOrders.xlsx');
+
+      // Send email with formData
+      await this.emailService.SendEmail(formData);
+      this.toastr.success("Email Sent");
+      this.router.navigate(['/home']);
+    }
   
-    // Send email with formData
-    await this.emailService.SendEmail(formData);
-    this.toastr.success("Email Sent");
-    this.router.navigate(['/home']);
     }
 
 }
