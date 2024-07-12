@@ -66,7 +66,7 @@ export class ViewOrderComponent implements OnInit {
   formData.append('LineItemsJson', JSON.stringify(this.order.lineItems));
 
   // Append the Excel file as binary data with appropriate metadata
-  var file = this.excelService.convertToExcel(this.order, partInfo, vendorItems, 'calculatedOrders');
+  var file = this.excelService.convertToExcel(this.order, this.order.OrderInfo, vendorItems, 'calculatedOrders');
   formData.append('Attachment', file, 'calculatedOrders.xlsx');
 
   // Send email with formData
