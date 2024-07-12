@@ -45,25 +45,34 @@ export class UploadComponent implements OnInit {
   }
  
   public async uploadAndEmailOrder() {
-    let res = await this.orderService.UpsertOrders(this.order);
     let formData = new FormData();
-    
-    if(res > 0){
-      this.toastr.success("Order Uploaded");
-      this.router.navigate(['/home']);
-      Object.keys(this.order).forEach(key =>{
-        formData.append('Orders.' + key, this.order[key as keyof Orders] as string);
-      });
 
-      let partInfo = await this.orderService.GetAllOrderInfo();
+    // Assuming this.configService.orderInfo and this.order.vendorItems are arrays
+    this.order.OrderInfo = await this.orderService.GetAllOrderInfo(); // Note the "Orders." prefix added here
+    let vendorItems = this.order.vendorItems; // Note the "Orders." prefix added here
+    let lineItems = this.order.lineItems; // Note the "Orders." prefix added here
   
-      var file = this.excelService.convertToExcel(this.order, partInfo, this.order.vendorItems ,'calculatedOrders');
-      
-      formData.append('Attachment', file);
-      
-
-      await this.emailService.SendEmail(formData);
+    // Iterate over this.order keys and append to formData with "Orders." prefix
+    Object.keys(this.order).forEach(key => {
+      if (Array.isArray(this.order[key as keyof Orders])) {
+        formData.append(`Orders.${key}`, JSON.stringify(this.order[key as keyof Orders]));
+      } else {
+        formData.append(`Orders.${key}`, this.order[key as keyof Orders] as string);
+      }
+    });
+  
+    formData.append('OrderInfoJson', JSON.stringify(this.order.OrderInfo));
+    formData.append('VendorItemsJson', JSON.stringify(this.order.vendorItems));
+    formData.append('LineItemsJson', JSON.stringify(this.order.lineItems));
+  
+    // Append the Excel file as binary data with appropriate metadata
+    var file = this.excelService.convertToExcel(this.order, this.order.OrderInfo, vendorItems, 'calculatedOrders');
+    formData.append('Attachment', file, 'calculatedOrders.xlsx');
+  
+    // Send email with formData
+    await this.emailService.SendEmail(formData);
+    this.toastr.success("Email Sent");
+    this.router.navigate(['/home']);
     }
-  }
 
 }
